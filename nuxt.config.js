@@ -17,8 +17,12 @@ export default {
   css: [
   ],
 
+  router: {
+    middleware: ['auth']
+  },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/nprogress.client.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -37,11 +41,39 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/auth-next'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:3002',
+  },
+  auth: {
+    strategies: {
+      local: false,
+      cookie: {
+        cookie: {
+          // name: 'XSRF-TOKEN',
+        },
+        token: {
+          property: 'accessToken',
+          global: true,
+          required: true,
+        },
+        user: {
+          autoFetch: false
+        },
+        tokenRequired: true,
+        endpoints: {
+          csrf: null,
+          login: { url: '/login', method: 'post' },
+          logout: { url: '/logout', method: 'post' },
+          user: false
+        }
+      }
+    }
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
